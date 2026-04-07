@@ -4,7 +4,7 @@ To make sure we get maximum marks for the **Project Management** and **Technical
 
 To keep this as simple and fast as possible, we are using a **Sprint-Based Branching** strategy.
 
-## 📁 1. The Golden Rule: Folder Isolation
+## 1. The Golden Rule: Folder Isolation
 
 To guarantee we NEVER get merge conflicts, we must stick to our folders:
 
@@ -15,7 +15,7 @@ To guarantee we NEVER get merge conflicts, we must stick to our folders:
 
 ---
 
-## 🌿 2. How to work (The Step-by-Step Guide)
+## 2. How to work (The Step-by-Step Guide)
 
 Whenever we start a new sprint, follow these exact steps.
 
@@ -27,3 +27,21 @@ Before you start working, make sure your local `main` branch is up to date:
 git checkout main
 git pull origin main
 ```
+
+## 3. Branch Naming Rules
+
+To keep our repository organized and make sure the tutor can easily see who did what for our A3, A4, and A5 Sprint Reports, we are using a strict naming format for our branches:
+
+**Format:** `sprint[number]-[feature-or-role]`
+
+**Exact Branches to use for Sprint 1:**
+
+- Amir (Next.js setup): `sprint1-frontend`
+- Saad (Express setup): `sprint1-express`
+- Sami (MongoDB setup): `sprint1-mongo`
+
+**Examples for Future Sprints:**
+
+- Amir: `sprint2-login-ui`
+- Saad: `sprint2-auth-routes`
+- Sami: `sprint2-user-schema`
