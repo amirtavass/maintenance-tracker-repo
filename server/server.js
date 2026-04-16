@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const authRoutes = require("./routes/authRoutes");
+const protectedRoutes = require("./routes/protectedRoutes");
+
 const app = express();
 
 app.use(cors());
@@ -19,6 +22,9 @@ app.get("/api/health", (req, res) => {
     message: "Maintenance Tracker API is running without an issue.",
   });
 });
+
+app.use("/api/auth", authRoutes);
+app.use("/api/protected", protectedRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
