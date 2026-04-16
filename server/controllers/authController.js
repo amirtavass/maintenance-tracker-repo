@@ -4,7 +4,7 @@ const generateToken = require("../utils/generateToken");
 // Register a new user and return public user data only
 const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -12,6 +12,10 @@ const registerUser = async (req, res, next) => {
         message: "Name, email, and password are required.",
       });
     }
+
+    // Validate role if provided
+    const validRoles = ["student", "staff", "admin"];
+    const userRole = role && validRoles.includes(role) ? role : "student";
 
     const normalizedEmail = email.toLowerCase().trim();
     const existingUser = await User.findOne({ email: normalizedEmail });
@@ -27,7 +31,7 @@ const registerUser = async (req, res, next) => {
       name: name.trim(),
       email: normalizedEmail,
       password,
-      role: "student", // Enforce default student role
+      role: userRole,
     });
 
     await user.save();
