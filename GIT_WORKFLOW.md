@@ -8,9 +8,6 @@ To keep this as simple and fast as possible, we are using a **Sprint-Based Branc
 
 To guarantee we NEVER get merge conflicts, we must stick to our folders:
 
-- **Amir (Next.js):** Only works inside the `/client` folder.
-- **Saad (Express):** Only works inside the `/server` folder.
-- **Sami (MongoDB):** Only works inside the `/server` folder (coordinating with Saad).
 - **Never push directly to `main`.**
 
 ---
@@ -45,3 +42,38 @@ To keep our repository organized and make sure the tutor can easily see who did 
 - Amir: `sprint2-login-ui`
 - Saad: `sprint2-auth-routes`
 - Sami: `sprint2-user-schema`
+
+## 4. Setting up the Database (Seed Data)
+
+To prepare for our demo, we need realistic data (users and tickets) in our database so the frontend team can build the dashboards without looking at empty screens.
+
+**Whenever you pull the latest code or need to reset your database, follow these steps:**
+
+1. Open your terminal and navigate to the server folder:
+   ```bash
+   cd server
+   ```
+2. Install the dependencies first
+   ```bash
+   npm install
+   ```
+3. Run the seed script:
+   npm run seed
+
+   Note: If the npm command fails, you can also run node seed.js directly
+
+What this does:
+It will wipe the current database and instantly generate:
+
+1 Admin (admin@thecube.com)
+
+2 Staff (bob@thecube.com, charlie@thecube.com)
+
+3 Students (david@student.com, emma@student.com, frank@student.com)
+
+10 Dummy Tickets with randomized priorities and statuses.
+
+Demo Login Credentials:
+All seeded accounts use the exact same password for testing purposes:
+
+Password: password123
