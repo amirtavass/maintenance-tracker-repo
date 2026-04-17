@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
+const ticketRoutes = require("./routes/ticketRoutes");
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
+
+app.use("/api/tickets", ticketRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
