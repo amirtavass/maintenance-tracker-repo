@@ -1,22 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function StudentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccess(message);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:5001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,6 +102,10 @@ export default function StudentLogin() {
             <div className="text-red-600 text-sm text-center">{error}</div>
           )}
 
+          {success && (
+            <div className="text-green-600 text-sm text-center">{success}</div>
+          )}
+
           <div>
             <button
               type="submit"
@@ -99,6 +114,15 @@ export default function StudentLogin() {
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
+          </div>
+
+          <div className="text-center">
+            <Link
+              href="/register/student"
+              className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
+            >
+              Don't have an account? Register
+            </Link>
           </div>
         </form>
       </div>
