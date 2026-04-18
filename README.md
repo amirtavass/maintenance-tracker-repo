@@ -145,9 +145,11 @@ JWT_SECRET=your_jwt_secret_key_here
 - `PORT`: Server port (default: 5000)
 - `JWT_SECRET`: Secret key for signing JWT tokens
 
+> Note: On some macOS systems, port `5000` may already be occupied by a local service. If that happens, change `PORT` to `5001` in `server/.env`, and update frontend `fetch()` calls to use `http://localhost:5001`.
+
 ### Frontend Setup
 
-The frontend automatically connects to the backend via environment configuration. Ensure the backend is running on `http://localhost:5000`.
+The frontend automatically connects to the backend via environment configuration. Ensure the backend is running on `http://localhost:5000` or `http://localhost:5001` if port `5000` is unavailable.
 
 ## 🚀 Running the Application
 
@@ -160,7 +162,7 @@ cd server
 npm run dev
 ```
 
-The backend will start on `http://localhost:5000`
+The backend will start on `http://localhost:5000` unless port `5000` is unavailable.
 
 #### Terminal 2 - Start Frontend Development Server
 
@@ -170,6 +172,8 @@ npm run dev
 ```
 
 The frontend will start on `http://localhost:3000`
+
+> If you change the backend port to `5001` in `server/.env`, make sure the frontend auth URLs also use `http://localhost:5001`.
 
 ### Production Build
 

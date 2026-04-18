@@ -13,16 +13,22 @@ export default function Home() {
 
         <div className="flex items-center justify-center gap-x-6">
           <Link
-            href="/login"
+            href="/login/student"
             className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
           >
-            Report an Issue
+            Student Login
           </Link>
           <Link
-            href="/login"
-            className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-600 transition-colors"
+            href="/login/staff"
+            className="rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 transition-colors"
           >
-            Admin Login <span aria-hidden="true">→</span>
+            Staff Login
+          </Link>
+          <Link
+            href="/login/admin"
+            className="rounded-md bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 transition-colors"
+          >
+            Admin Login
           </Link>
         </div>
       </div>
