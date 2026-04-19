@@ -1,19 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
-export default function StaffLogin() {
+function StaffLoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccess(message);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       const response = await fetch("http://localhost:5001/api/auth/login", {
@@ -27,6 +38,10 @@ export default function StaffLogin() {
       const data = await response.json();
 
       if (response.ok) {
+        if (data.data.user.role !== 'staff') {
+          setError("Access denied. This login page is for staff only.");
+          return;
+        }
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         router.push("/dashboard/staff");
@@ -91,6 +106,10 @@ export default function StaffLogin() {
             <div className="text-red-600 text-sm text-center">{error}</div>
           )}
 
+          {success && (
+            <div className="text-green-600 text-sm text-center">{success}</div>
+          )}
+
           <div>
             <button
               type="submit"
@@ -100,8 +119,25 @@ export default function StaffLogin() {
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
+
+          <div className="text-center">
+            <Link
+              href="/register/staff"
+              className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
+            >
+              Don't have an account? Register
+            </Link>
+          </div>
         </form>
       </div>
     </div>
+  );
+}
+
+export default function StaffLogin() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StaffLoginContent />
+    </Suspense>
   );
 }

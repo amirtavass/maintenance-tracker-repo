@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function StudentLogin() {
+function StudentLoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -38,6 +38,10 @@ export default function StudentLogin() {
       const data = await response.json();
 
       if (response.ok) {
+        if (data.data.user.role !== 'student') {
+          setError("Access denied. This login page is for students only.");
+          return;
+        }
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         router.push("/dashboard/student");
@@ -127,5 +131,13 @@ export default function StudentLogin() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function StudentLogin() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StudentLoginContent />
+    </Suspense>
   );
 }
