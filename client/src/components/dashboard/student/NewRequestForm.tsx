@@ -3,32 +3,47 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface FormData {
+  title: string;
+  description: string;
+  category: string;
+  priority: string;
+  roomNumber: string;
+}
+
+interface FormErrors {
+  title?: string;
+  description?: string;
+  category?: string;
+  roomNumber?: string;
+}
+
 export default function NewRequestForm() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
     category: "",
     priority: "low",
     roomNumber: "",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
   const categories = ["Plumbing", "Electrical", "Furniture", "Internet", "Other"];
   const priorities = ["low", "medium", "high"];
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
+    if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  const validateForm = (): FormErrors => {
+    const newErrors: FormErrors = {};
     if (!formData.title.trim()) newErrors.title = "Issue title is required.";
     if (!formData.description.trim()) newErrors.description = "Description is required.";
     if (!formData.category) newErrors.category = "Category is required.";
@@ -36,7 +51,7 @@ export default function NewRequestForm() {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
