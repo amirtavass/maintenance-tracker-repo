@@ -6,6 +6,7 @@ A comprehensive full-stack web application for managing student accommodation ma
 
 - [Overview](#overview)
 - [Features](#features)
+- [Functional Requirements](#functional-requirements)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
@@ -36,6 +37,82 @@ The Maintenance Tracker is a student accommodation management platform designed 
 - **Protected Routes**: Role-specific endpoints and dashboard areas
 - **RESTful API**: Well-structured API endpoints for all operations
 - **Responsive UI**: Modern, mobile-friendly interface built with Next.js and Tailwind CSS
+
+## Functional Requirements
+
+1. Authentication & Authorization
+
+FR-01: The system shall allow users to register by providing name, email, password, and role (Student, Manager, Staff).
+
+FR-02: The system shall validate the email format during registration and reject invalid entries.
+
+FR-03: The system shall enforce password complexity rules (minimum 8 characters, including at least one number and one special character).
+
+FR-04: The system shall prevent registration using an email address that already exists in the system.
+
+FR-05: The system shall allow registered users to log in using valid email and password credentials.
+
+FR-06: The system shall display appropriate error messages when invalid login credentials are entered.
+
+FR-07: The system shall implement Role-Based Access Control (RBAC) to restrict access based on user roles.
+
+FR-08: The system shall prevent unauthorized access to protected resources and routes.
+
+2. Ticket Creation & Management (Student)
+
+FR-09: The system shall allow students to create maintenance tickets.
+
+FR-10: The system shall require mandatory fields (title, description, and location) for ticket creation.
+
+FR-11: The system shall validate that all required fields are completed before allowing submission.
+
+FR-12: The system shall allow students to view all tickets they have created.
+
+FR-13: The system shall display ticket details, including status, priority, assigned staff, and timestamps.
+
+3. Manager Functionality
+
+FR-14: The system shall allow managers to view all maintenance tickets.
+
+FR-15: The system shall allow managers to assign tickets to staff members.
+
+FR-16: The system shall allow managers to set and update ticket priority (Low, Medium, High).
+
+FR-17: The system shall allow managers to filter and search tickets based on status, priority, and date.
+
+FR-18: The system shall restrict managers from assigning tickets to users who are not designated as staff.
+
+4. Staff Functionality
+
+FR-19: The system shall allow staff to view only the tickets assigned to them.
+
+FR-20: The system shall allow staff to update ticket status (Pending, In Progress, Completed).
+
+FR-21: The system shall enforce valid status transitions as defined by the system workflow.
+
+FR-22: The system shall prevent staff from modifying tickets not assigned to them.
+
+5. Ticket Lifecycle & Tracking
+
+FR-23: The system shall automatically assign a default status of “Pending” to newly created tickets.
+
+FR-24: The system shall record timestamps for ticket creation and all subsequent updates.
+
+FR-25: The system shall maintain a history log of ticket updates, including status changes and assignments.
+
+6. Validation & Error Handling
+
+FR-26: The system shall validate all user inputs and display meaningful error messages for invalid or missing data.
+
+FR-27: The system shall validate all API requests to prevent submission of invalid or malicious data.
+
+FR-28: The system shall handle system and server errors gracefully and provide user-friendly feedback.
+
+7. Security Requirements
+
+FR-29: The system shall securely store user passwords using encryption techniques.
+
+FR-30: The system shall use token-based authentication (e.g., JWT) to authorize API access and reject unauthorized requests.
 
 ## 🛠 Tech Stack
 
