@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -9,6 +9,7 @@ function StudentLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -16,13 +17,21 @@ function StudentLoginForm() {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
 
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccess(message);
+    }
+  }, [searchParams]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:5001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,6 +136,12 @@ function StudentLoginForm() {
           ) : null;
         })()}
 
+        {success && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md">
+            <p className="text-sm text-green-700">{success}</p>
+          </div>
+        )}
+
         <div>
           <button
             type="submit"
@@ -135,6 +150,15 @@ function StudentLoginForm() {
           >
             {loading ? "Verifying Credentials..." : "Sign in"}
           </button>
+        </div>
+
+        <div className="text-center">
+          <Link
+            href="/register/student"
+            className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
+          >
+            Don&apos;t have an account? Register
+          </Link>
         </div>
       </form>
     </div>
