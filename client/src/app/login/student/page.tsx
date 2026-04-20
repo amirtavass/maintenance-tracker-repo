@@ -108,11 +108,24 @@ function StudentLoginForm() {
         </div>
 
         {/* Display both API errors and URL errors */}
-        {(error || urlError) && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-            <p className="text-sm text-red-700">{error || urlError}</p>
-          </div>
-        )}
+        {(() => {
+          const safeUrlError =
+            urlError === "invalid_credentials"
+              ? "Invalid email or password."
+              : urlError === "session_expired"
+                ? "Your session has expired. Please sign in again."
+                : urlError === "unauthorized"
+                  ? "You must sign in to continue."
+                  : ""; // Ignores any random text a hacker tries to inject
+
+          const displayError = error || safeUrlError;
+
+          return displayError ? (
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+              <p className="text-sm text-red-700">{displayError}</p>
+            </div>
+          ) : null;
+        })()}
 
         <div>
           <button

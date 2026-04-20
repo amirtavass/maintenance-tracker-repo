@@ -79,7 +79,7 @@ function AdminLoginForm() {
               type="email"
               autoComplete="email"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-colors"
               placeholder="david@admin.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -107,17 +107,30 @@ function AdminLoginForm() {
         </div>
 
         {/* Display both API errors and URL errors */}
-        {(error || urlError) && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-            <p className="text-sm text-red-700">{error || urlError}</p>
-          </div>
-        )}
+        {(() => {
+          const safeUrlError =
+            urlError === "invalid_credentials"
+              ? "Invalid email or password."
+              : urlError === "session_expired"
+                ? "Your session has expired. Please sign in again."
+                : urlError === "unauthorized"
+                  ? "You must sign in to continue."
+                  : ""; // Ignores any random text a hacker tries to inject
+
+          const displayError = error || safeUrlError;
+
+          return displayError ? (
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+              <p className="text-sm text-red-700">{displayError}</p>
+            </div>
+          ) : null;
+        })()}
 
         <div>
           <button
             type="submit"
             disabled={loading}
-            className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-purple-600 hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 disabled:opacity-50 transition-colors shadow-sm"
+            className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-purple-600 hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 disabled:opacity-50 transition-colors shadow-sm"
           >
             {loading ? "Verifying Credentials..." : "Sign in"}
           </button>
