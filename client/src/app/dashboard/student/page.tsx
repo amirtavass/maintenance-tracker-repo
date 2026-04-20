@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import ActivityTimeline from "@/components/dashboard/student/ActivityTimeline";
 import ChartOverview from "@/components/dashboard/student/ChartOverview";
 import Navbar from "@/components/dashboard/student/Navbar";
@@ -8,6 +10,18 @@ import ProfileCard from "@/components/dashboard/student/ProfileCard";
 import RequestTable from "@/components/dashboard/student/RequestTable";
 import Sidebar from "@/components/dashboard/student/Sidebar";
 import SummaryCard from "@/components/dashboard/student/SummaryCard";
+
+interface Ticket {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  priority: string;
+  roomNumber: string;
+  status: string;
+  createdAt: string;
+  createdBy: { name: string; email: string };
+}
 
 export default function StudentDashboard() {
   const studentName = "Sophie Turner";
@@ -19,45 +33,47 @@ export default function StudentDashboard() {
     phone: "+44 7712 345678",
   };
 
-  const requests = [
-    {
-      id: "REQ-2101",
-      title: "Heater not warming in room",
-      status: "In Progress",
-      priority: "High",
-      submitted: "Today",
-      location: "Room 214",
-    },
-    {
-      id: "REQ-2098",
-      title: "Bathroom faucet leaking",
-      status: "Open",
-      priority: "Medium",
-      submitted: "Yesterday",
-      location: "Room 214",
-    },
-    {
-      id: "REQ-2086",
-      title: "Broken window latch",
-      status: "Resolved",
-      priority: "Low",
-      submitted: "Apr 18",
-      location: "Room 212",
-    },
-    {
-      id: "REQ-2075",
-      title: "Wi-Fi connection dropping",
-      status: "In Progress",
-      priority: "Medium",
-      submitted: "Apr 16",
-      location: "Common Area",
-    },
-  ];
+  const [requests, setRequests] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const transformTickets = (tickets: Ticket[]) => {
+    return tickets.map((ticket) => ({
+      id: `REQ-${ticket._id.slice(-4)}`,
+      title: ticket.title,
+      status: ticket.status === "in-progress" ? "In Progress" : ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1),
+      priority: ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1),
+      submitted: new Date(ticket.createdAt).toLocaleDateString() === new Date().toLocaleDateString() ? "Today" : new Date(ticket.createdAt).toLocaleDateString(),
+      location: `Room ${ticket.roomNumber}`,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:5001/api/tickets", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setRequests(data.data.tickets);
+        }
+      } catch (error) {
+        console.error("Failed to fetch requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
 
   const stats = [
     {
       label: "Total Requests",
-      value: "24",
+      value: requests.length.toString(),
       delta: "+12% this month",
       description: "All active and historic reports",
       accentClass: "bg-slate-900",
@@ -69,7 +85,7 @@ export default function StudentDashboard() {
     },
     {
       label: "Pending",
-      value: "6",
+      value: requests.filter((r) => r.status === "open").length.toString(),
       delta: "Stable",
       description: "Awaiting technician review",
       accentClass: "bg-blue-600",
@@ -81,7 +97,7 @@ export default function StudentDashboard() {
     },
     {
       label: "In Progress",
-      value: "10",
+      value: requests.filter((r) => r.status === "in-progress").length.toString(),
       delta: "+7% this week",
       description: "Technicians are working on these",
       accentClass: "bg-amber-500",
@@ -93,7 +109,7 @@ export default function StudentDashboard() {
     },
     {
       label: "Resolved",
-      value: "8",
+      value: requests.filter((r) => r.status === "resolved").length.toString(),
       delta: "+19% since last month",
       description: "Issues that were completed",
       accentClass: "bg-emerald-500",
@@ -123,9 +139,11 @@ export default function StudentDashboard() {
                         Manage your accommodation maintenance requests, get updates in real time, and keep your room comfortable without extra steps.
                       </p>
                     </div>
-                    <button className="inline-flex items-center justify-center rounded-3xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-100">
-                      Submit New Request
-                    </button>
+                    <Link href="/dashboard/student/new-request">
+                      <button className="inline-flex items-center justify-center rounded-3xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-100">
+                        Submit New Request
+                      </button>
+                    </Link>
                   </div>
                 </div>
 
@@ -140,7 +158,11 @@ export default function StudentDashboard() {
                   <NotificationsPanel />
                 </div>
 
-                <RequestTable requests={requests} />
+                {loading ? (
+                  <div className="text-center py-8">Loading requests...</div>
+                ) : (
+                  <RequestTable requests={transformTickets(requests)} />
+                )}
               </div>
 
               <div className="space-y-6">
