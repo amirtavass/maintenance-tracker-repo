@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./server
+    container_name: cube-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env # Tells Docker to load your backend secrets
+    restart: always
+
+  frontend:
+    build: ./client
+    container_name: cube-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend # Ensures the backend starts before the frontend
+    restart: always
