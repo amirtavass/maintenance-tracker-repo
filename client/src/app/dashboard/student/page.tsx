@@ -51,14 +51,14 @@ export default function StudentDashboard() {
     const fetchRequests = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5001/api/tickets", {
+        const response = await fetch("http://localhost:5001/api/requests", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         const data = await response.json();
         if (response.ok) {
-          setRequests(data.data.tickets);
+          setRequests(data.data?.tickets || []);
         }
       } catch (error) {
         console.error("Failed to fetch requests:", error);

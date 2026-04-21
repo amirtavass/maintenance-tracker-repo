@@ -64,7 +64,7 @@ export default function NewRequestForm() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/api/tickets", {
+      const response = await fetch("http://localhost:5001/api/requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
