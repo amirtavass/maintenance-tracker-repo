@@ -42,6 +42,10 @@ function StudentLoginForm() {
       const data = await response.json();
 
       if (response.ok) {
+        if (data.data.user.role !== "student") {
+          setError("Access denied. This login page is for students only.");
+          return;
+        }
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         router.push("/dashboard/student");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -9,16 +9,25 @@ function AdminLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccess(message);
+    }
+  }, [searchParams]);
+
   const urlError = searchParams.get("error");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       const response = await fetch("http://localhost:5001/api/auth/login", {
@@ -32,6 +41,12 @@ function AdminLoginForm() {
       const data = await response.json();
 
       if (response.ok) {
+        if (data.data.user.role !== "admin") {
+          setError(
+            "Access denied. This login page is for administrators only.",
+          );
+          return;
+        }
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         router.push("/dashboard/admin");

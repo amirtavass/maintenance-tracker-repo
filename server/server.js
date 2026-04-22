@@ -25,9 +25,10 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/protected", protectedRoutes);
+app.use("/api", protectedRoutes);
 
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/requests", ticketRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

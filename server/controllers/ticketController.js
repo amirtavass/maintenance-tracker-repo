@@ -2,19 +2,21 @@ const Ticket = require("../models/Ticket");
 
 const createTicket = async (req, res) => {
   try {
-    const { title, description, priority } = req.body;
+    const { title, description, category, priority, roomNumber } = req.body;
 
-    if (!title || !description) {
+    if (!title || !description || !category || !roomNumber) {
       return res.status(400).json({
         status: "fail",
-        message: "Title and description are required.",
+        message: "Title, description, category, and room number are required.",
       });
     }
 
     const ticket = await Ticket.create({
       title,
       description,
+      category,
       priority: priority || "low",
+      roomNumber,
       createdBy: req.user._id,
     });
 
