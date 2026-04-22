@@ -31,13 +31,16 @@ function StudentLoginForm() {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      });
+      );
 
       const data = await response.json();
 
@@ -60,12 +63,12 @@ function StudentLoginForm() {
   };
 
   return (
-    <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg border border-gray-100">
+    <div className="max-w-md w-full space-y-8 bg-white dark:bg-zinc-900 p-10 rounded-xl shadow-lg border border-gray-100 dark:border-zinc-800">
       <div className="relative">
         {/* Back Button */}
         <Link
           href="/"
-          className="absolute -top-4 -left-4 text-sm text-gray-400 hover:text-blue-600 transition-colors flex items-center gap-1"
+          className="absolute -top-4 -left-4 text-sm text-gray-400 dark:text-zinc-400 hover:text-blue-600 transition-colors flex items-center gap-1"
         >
           <span>&larr;</span> Back to Home
         </Link>
@@ -73,7 +76,7 @@ function StudentLoginForm() {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-[#1e3b8a]">
           Student Login
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-500">
+        <p className="mt-2 text-center text-sm text-gray-500 dark:text-zinc-400">
           Sign in to access your maintenance dashboard
         </p>
       </div>
@@ -83,7 +86,7 @@ function StudentLoginForm() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-white"
             >
               Email address
             </label>
@@ -93,7 +96,7 @@ function StudentLoginForm() {
               type="email"
               autoComplete="email"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 placeholder-gray-400 dark:placeholder-zinc-500 text-gray-900 dark:text-white dark:bg-zinc-800 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
               placeholder="david@student.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -102,7 +105,7 @@ function StudentLoginForm() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-white"
             >
               Password
             </label>
@@ -112,7 +115,7 @@ function StudentLoginForm() {
               type="password"
               autoComplete="current-password"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 placeholder-gray-400 dark:placeholder-zinc-500 text-gray-900 dark:text-white dark:bg-zinc-800 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -134,15 +137,19 @@ function StudentLoginForm() {
           const displayError = error || safeUrlError;
 
           return displayError ? (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-              <p className="text-sm text-red-700">{displayError}</p>
+            <div className="bg-red-50 dark:bg-red-900 dark:bg-opacity-20 border-l-4 border-red-500 p-4 rounded-md">
+              <p className="text-sm text-red-700 dark:text-red-400">
+                {displayError}
+              </p>
             </div>
           ) : null;
         })()}
 
         {success && (
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md">
-            <p className="text-sm text-green-700">{success}</p>
+          <div className="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 border-l-4 border-green-500 p-4 rounded-md">
+            <p className="text-sm text-green-700 dark:text-green-400">
+              {success}
+            </p>
           </div>
         )}
 
@@ -159,7 +166,7 @@ function StudentLoginForm() {
         <div className="text-center">
           <Link
             href="/register/student"
-            className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
+            className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
           >
             Don&apos;t have an account? Register
           </Link>
@@ -171,7 +178,7 @@ function StudentLoginForm() {
 
 export default function StudentLoginPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8">
       <Suspense
         fallback={
           <div className="text-[#1e3b8a] font-semibold animate-pulse">

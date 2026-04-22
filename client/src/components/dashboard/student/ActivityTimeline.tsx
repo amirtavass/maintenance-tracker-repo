@@ -3,13 +3,15 @@
 const timeline = [
   {
     title: "Request assigned to technician",
-    description: "Your heater issue has been assigned and is scheduled for inspection.",
+    description:
+      "Your heater issue has been assigned and is scheduled for inspection.",
     date: "Today, 09:15 AM",
     status: "In Progress",
   },
   {
     title: "New request submitted",
-    description: "You submitted a new maintenance request for a room heater issue.",
+    description:
+      "You submitted a new maintenance request for a room heater issue.",
     date: "Yesterday, 08:40 PM",
     status: "Open",
   },
@@ -29,24 +31,39 @@ const statusClasses = {
 
 export default function ActivityTimeline() {
   return (
-    <section id="activity" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section
+      id="activity"
+      className="rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm"
+    >
       <div>
-        <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Activity</p>
-        <h2 className="mt-2 text-lg font-semibold text-slate-900">Request progress</h2>
+        <p className="text-sm uppercase tracking-[0.2em] text-slate-400 dark:text-zinc-200">
+          Activity
+        </p>
+        <h2 className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
+          Request progress
+        </h2>
       </div>
       <div className="mt-6 space-y-6">
         {timeline.map((item) => (
           <div key={item.title} className="flex gap-4">
-            <div className="mt-1 h-3 w-3 rounded-full bg-slate-300" />
-            <div className="flex-1 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+            <div className="mt-1 h-3 w-3 rounded-full bg-slate-300 dark:bg-zinc-950" />
+            <div className="flex-1 rounded-3xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 p-4">
               <div className="flex items-center justify-between gap-3">
-                <h3 className="font-semibold text-slate-900">{item.title}</h3>
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClasses[item.status as keyof typeof statusClasses]}`}>
+                <h3 className="font-semibold text-slate-900 dark:text-white">
+                  {item.title}
+                </h3>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClasses[item.status as keyof typeof statusClasses]}`}
+                >
                   {item.status}
                 </span>
               </div>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{item.description}</p>
-              <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-400">{item.date}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-zinc-300">
+                {item.description}
+              </p>
+              <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-white">
+                {item.date}
+              </p>
             </div>
           </div>
         ))}

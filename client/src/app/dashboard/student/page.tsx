@@ -57,9 +57,17 @@ export default function StudentDashboard() {
     return tickets.map((ticket) => ({
       id: `REQ-${ticket._id.slice(-4)}`,
       title: ticket.title,
-      status: ticket.status === "in-progress" ? "In Progress" : ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1),
-      priority: ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1),
-      submitted: new Date(ticket.createdAt).toLocaleDateString() === new Date().toLocaleDateString() ? "Today" : new Date(ticket.createdAt).toLocaleDateString(),
+      status:
+        ticket.status === "in-progress"
+          ? "In Progress"
+          : ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1),
+      priority:
+        ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1),
+      submitted:
+        new Date(ticket.createdAt).toLocaleDateString() ===
+        new Date().toLocaleDateString()
+          ? "Today"
+          : new Date(ticket.createdAt).toLocaleDateString(),
       location: `Room ${ticket.roomNumber}`,
     }));
   };
@@ -152,8 +160,18 @@ export default function StudentDashboard() {
       description: "All active and historic reports",
       accentClass: "bg-slate-900",
       icon: (
-        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 7h18M9 3h6M9 21h6M5 11h14M5 15h14" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 24 24"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d="M3 7h18M9 3h6M9 21h6M5 11h14M5 15h14"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       ),
     },
@@ -164,20 +182,42 @@ export default function StudentDashboard() {
       description: "Awaiting technician review",
       accentClass: "bg-blue-600",
       icon: (
-        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 8v4l2 2M6.343 6.343a9 9 0 1112.728 12.728 9 9 0 01-12.728-12.728z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 24 24"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d="M12 8v4l2 2M6.343 6.343a9 9 0 1112.728 12.728 9 9 0 01-12.728-12.728z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       ),
     },
     {
       label: "In Progress",
-      value: requests.filter((r) => r.status === "in-progress").length.toString(),
+      value: requests
+        .filter((r) => r.status === "in-progress")
+        .length.toString(),
       delta: "+7% this week",
       description: "Technicians are working on these",
       accentClass: "bg-amber-500",
       icon: (
-        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 4h16v16H4V4zm4 4h8M8 12h8M8 16h4" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 24 24"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d="M4 4h16v16H4V4zm4 4h8M8 12h8M8 16h4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       ),
     },
@@ -188,15 +228,25 @@ export default function StudentDashboard() {
       description: "Issues that were completed",
       accentClass: "bg-emerald-500",
       icon: (
-        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M5 12l5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 24 24"
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            d="M5 12l5 5L20 7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       ),
     },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white transition-colors">
       <div className="xl:flex xl:min-h-screen">
         <Sidebar onProfileClick={() => setIsEditingProfile(true)} />
         <div className="flex-1">
@@ -218,10 +268,16 @@ export default function StudentDashboard() {
                 <div className="rounded-[2rem] bg-gradient-to-r from-slate-900 to-slate-700 p-8 text-white shadow-xl overflow-hidden">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                      <p className="text-sm uppercase tracking-[0.28em] text-slate-300">Welcome back</p>
-                      <h2 className="mt-4 text-3xl font-semibold">{userProfile?.name || "Loading..."}</h2>
+                      <p className="text-sm uppercase tracking-[0.28em] text-slate-300">
+                        Welcome back
+                      </p>
+                      <h2 className="mt-4 text-3xl font-semibold">
+                        {userProfile?.name || "Loading..."}
+                      </h2>
                       <p className="mt-3 max-w-xl text-sm leading-6 text-slate-200">
-                        Manage your accommodation maintenance requests, get updates in real time, and keep your room comfortable without extra steps.
+                        Manage your accommodation maintenance requests, get
+                        updates in real time, and keep your room comfortable
+                        without extra steps.
                       </p>
                     </div>
                     <Link href="/dashboard/student/new-request">
