@@ -31,10 +31,20 @@ export default function NewRequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
-  const categories = ["Plumbing", "Electrical", "Furniture", "Internet", "Other"];
+  const categories = [
+    "Plumbing",
+    "Electrical",
+    "Furniture",
+    "Internet",
+    "Other",
+  ];
   const priorities = ["low", "medium", "high"];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof FormErrors]) {
@@ -45,9 +55,11 @@ export default function NewRequestForm() {
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
     if (!formData.title.trim()) newErrors.title = "Issue title is required.";
-    if (!formData.description.trim()) newErrors.description = "Description is required.";
+    if (!formData.description.trim())
+      newErrors.description = "Description is required.";
     if (!formData.category) newErrors.category = "Category is required.";
-    if (!formData.roomNumber.trim()) newErrors.roomNumber = "Room number is required.";
+    if (!formData.roomNumber.trim())
+      newErrors.roomNumber = "Room number is required.";
     return newErrors;
   };
 
@@ -91,9 +103,15 @@ export default function NewRequestForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 space-y-6"
+    >
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-2">
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-slate-700 dark:text-white mb-2"
+        >
           Issue Title *
         </label>
         <input
@@ -105,11 +123,16 @@ export default function NewRequestForm() {
           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Brief description of the issue"
         />
-        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+        {errors.title && (
+          <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-2">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-slate-700 dark:text-white mb-2"
+        >
           Description *
         </label>
         <textarea
@@ -118,15 +141,20 @@ export default function NewRequestForm() {
           value={formData.description}
           onChange={handleChange}
           rows={4}
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-slate-300 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Detailed description of the issue"
         />
-        {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+        {errors.description && (
+          <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-slate-700 mb-2">
+          <label
+            htmlFor="category"
+            className="block text-sm font-medium text-slate-700 dark:text-white mb-2"
+          >
             Category *
           </label>
           <select
@@ -134,7 +162,7 @@ export default function NewRequestForm() {
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Select a category</option>
             {categories.map((cat) => (
@@ -143,11 +171,16 @@ export default function NewRequestForm() {
               </option>
             ))}
           </select>
-          {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+          {errors.category && (
+            <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="priority" className="block text-sm font-medium text-slate-700 mb-2">
+          <label
+            htmlFor="priority"
+            className="block text-sm font-medium text-slate-700 dark:text-white mb-2"
+          >
             Priority
           </label>
           <select
@@ -155,7 +188,7 @@ export default function NewRequestForm() {
             name="priority"
             value={formData.priority}
             onChange={handleChange}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             {priorities.map((pri) => (
               <option key={pri} value={pri}>
@@ -167,7 +200,10 @@ export default function NewRequestForm() {
       </div>
 
       <div>
-        <label htmlFor="roomNumber" className="block text-sm font-medium text-slate-700 mb-2">
+        <label
+          htmlFor="roomNumber"
+          className="block text-sm font-medium text-slate-700 dark:text-white mb-2"
+        >
           Room Number *
         </label>
         <input
@@ -176,14 +212,18 @@ export default function NewRequestForm() {
           name="roomNumber"
           value={formData.roomNumber}
           onChange={handleChange}
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-slate-300 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="e.g., 214"
         />
-        {errors.roomNumber && <p className="text-red-500 text-sm mt-1">{errors.roomNumber}</p>}
+        {errors.roomNumber && (
+          <p className="text-red-500 text-sm mt-1">{errors.roomNumber}</p>
+        )}
       </div>
 
       {submitMessage && (
-        <div className={`p-4 rounded-lg ${submitMessage.includes("success") ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+        <div
+          className={`p-4 rounded-lg ${submitMessage.includes("success") ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
+        >
           {submitMessage}
         </div>
       )}

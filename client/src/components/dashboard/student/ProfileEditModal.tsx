@@ -19,11 +19,18 @@ interface ProfileEditModalProps {
   }) => Promise<void>;
 }
 
-export default function ProfileEditModal({ open, initialValues, onClose, onSave }: ProfileEditModalProps) {
+export default function ProfileEditModal({
+  open,
+  initialValues,
+  onClose,
+  onSave,
+}: ProfileEditModalProps) {
   const [phone, setPhone] = useState(initialValues.phone);
   const [roomNumber, setRoomNumber] = useState(initialValues.roomNumber);
   const [blockNumber, setBlockNumber] = useState(initialValues.blockNumber);
-  const [accommodation, setAccommodation] = useState(initialValues.accommodation);
+  const [accommodation, setAccommodation] = useState(
+    initialValues.accommodation,
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,7 +42,8 @@ export default function ProfileEditModal({ open, initialValues, onClose, onSave 
       setAccommodation(initialValues.accommodation);
       setError("");
     }
-  }, [open, initialValues]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   if (!open) {
     return null;
@@ -57,57 +65,65 @@ export default function ProfileEditModal({ open, initialValues, onClose, onSave 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 py-8">
-      <div className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50  px-4 py-8">
+      <div className="w-full max-w-2xl rounded-3xl bg-white dark:bg-zinc-900 p-6 shadow-2xl">
         <div className="flex items-center justify-between gap-4 mb-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Edit profile</p>
-            <h2 className="text-2xl font-semibold text-slate-900">Update your details</h2>
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-400 dark:text-white">
+              Edit profile
+            </p>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+              Update your details
+            </h2>
           </div>
-          <button type="button" className="text-slate-500 hover:text-slate-900" onClick={onClose}>
+          <button
+            type="button"
+            className="text-slate-500 dark:text-white hover:text-slate-900"
+            onClick={onClose}
+          >
             Close
           </button>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="space-y-2 text-sm text-slate-700">
+            <label className="space-y-2 text-sm text-slate-700 dark:text-white">
               Phone Number
               <input
                 type="text"
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900"
+                className="w-full rounded-3xl border border-slate-200 bg-slate-50 dark:bg-zinc-900 px-4 py-3 text-sm text-slate-900 dark:text-white outline-none transition focus:border-white"
               />
             </label>
-            <label className="space-y-2 text-sm text-slate-700">
+            <label className="space-y-2 text-sm text-slate-700  dark:text-white">
               Room Number
               <input
                 type="text"
                 value={roomNumber}
                 onChange={(event) => setRoomNumber(event.target.value)}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900"
+                className="w-full rounded-3xl border border-slate-200 bg-slate-50 dark:bg-zinc-900 px-4 py-3 text-sm text-slate-900 dark:text-white outline-none transition focus:border-white"
               />
             </label>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="space-y-2 text-sm text-slate-700">
+            <label className="space-y-2 text-sm text-slate-700  dark:text-white">
               Block Number
               <input
                 type="text"
                 value={blockNumber}
                 onChange={(event) => setBlockNumber(event.target.value)}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900"
+                className="w-full rounded-3xl border border-slate-200 bg-slate-50 dark:bg-zinc-900 px-4 py-3 text-sm text-slate-900 dark:text-white outline-none transition focus:border-white"
               />
             </label>
-            <label className="space-y-2 text-sm text-slate-700">
+            <label className="space-y-2 text-sm text-slate-700  dark:text-white">
               Accommodation
               <input
                 type="text"
                 value={accommodation}
                 onChange={(event) => setAccommodation(event.target.value)}
-                className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900"
+                className="w-full rounded-3xl border border-slate-200 bg-slate-50 dark:bg-zinc-900 px-4 py-3 text-sm text-slate-900 dark:text-white outline-none transition focus:border-white"
               />
             </label>
           </div>
@@ -118,14 +134,14 @@ export default function ProfileEditModal({ open, initialValues, onClose, onSave 
             <button
               type="button"
               onClick={onClose}
-              className="rounded-3xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              className="rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="rounded-3xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-3xl bg-slate-900  px-6 py-3 text-sm font-semibold text-white dark:text-zinc-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save changes"}
             </button>

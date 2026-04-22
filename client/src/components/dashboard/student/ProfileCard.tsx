@@ -16,28 +16,46 @@ export default function ProfileCard({
   phone: string;
 }) {
   return (
-    <div id="profile" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div
+      id="profile"
+      className="rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm"
+    >
       <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-blue-600 text-2xl font-semibold text-white shadow-sm">
-          {name.split(" ").map((part) => part[0]).join("")}
+        <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-blue-600 text-2xl font-semibold text-white dark:text-zinc-900 shadow-sm">
+          {name
+            .split(" ")
+            .map((part) => part[0])
+            .join("")}
         </div>
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Student profile</p>
-          <h2 className="text-xl font-semibold text-slate-900">{name}</h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm uppercase tracking-[0.2em] text-slate-400 dark:text-white">
+            Student profile
+          </p>
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+            {name}
+          </h2>
+          <p className="text-sm text-slate-500 dark:text-white">
             {accommodation} • Block {blockNumber} • Room {room}
           </p>
         </div>
       </div>
 
-      <div className="mt-6 space-y-4 text-sm text-slate-600">
+      <div className="mt-6 space-y-4 text-sm text-slate-600 dark:text-white">
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-slate-50 p-4">Email<div className="mt-2 font-semibold text-slate-900">{email}</div></div>
-          <div className="rounded-2xl bg-slate-50 p-4">Phone<div className="mt-2 font-semibold text-slate-900">{phone}</div></div>
+          <div className="rounded-2xl bg-slate-50 dark:bg-zinc-950 p-4">
+            Email
+            <div className="mt-2 font-semibold text-slate-900">{email}</div>
+          </div>
+          <div className="rounded-2xl bg-slate-50 dark:bg-zinc-950 p-4">
+            Phone
+            <div className="mt-2 font-semibold text-slate-900">{phone}</div>
+          </div>
         </div>
         <div className="rounded-2xl bg-slate-50 p-4">
           <p className="text-slate-500">Next scheduled update</p>
-          <p className="mt-2 font-semibold text-slate-900">Within 24 hours</p>
+          <p className="mt-2 font-semibold text-slate-900 dark:text-white">
+            Within 24 hours
+          </p>
         </div>
       </div>
     </div>
