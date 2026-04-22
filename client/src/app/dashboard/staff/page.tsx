@@ -166,24 +166,26 @@ export default function StaffDashboard() {
   const updateTicketStatus = async (ticketId: string, newStatus: string, notes?: string) => {
     try {
       const token = localStorage.getItem('token');
+      console.log('Updating ticket:', ticketId, 'Status:', newStatus);
+      
       const response = await fetch(`http://localhost:5001/api/requests/${ticketId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: newStatus, notes }),
+        body: JSON.stringify({ status: newStatus }),
       });
 
+      const data = await response.json();
+      console.log('Update response:', data);
+
       if (response.ok) {
-        // Update the ticket in the local state
-        setTickets(prev =>
-          prev.map(ticket =>
-            ticket._id === ticketId ? { ...ticket, status: newStatus as any, notes } : ticket
-          )
-        );
-        // Refresh to ensure UI is up to date
-        fetchTickets();
+        console.log('Status update successful, refreshing tickets...');
+        // Refresh to ensure UI is up to date and get fresh data from backend
+        await fetchTickets();
+      } else {
+        throw new Error(data.message || 'Failed to update status');
       }
     } catch (error) {
       console.error('Error updating ticket:', error);

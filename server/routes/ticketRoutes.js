@@ -23,6 +23,12 @@ router.route("/:id").get(getTicketById);
 
 router
   .route("/:id/status")
-  .patch(verifyRole("admin", "staff"), updateTicketStatus);
+  .patch(verifyRole("admin", "staff"), updateTicketStatus)
+  .put(verifyRole("admin", "staff"), updateTicketStatus);
+
+// Allow PUT on main endpoint for convenience
+router
+  .route("/:id")
+  .put(verifyRole("admin", "staff"), updateTicketStatus);
 
 module.exports = router;

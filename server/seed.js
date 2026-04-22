@@ -46,18 +46,27 @@ const seedDatabase = async () => {
         email: "david@student.com",
         password: defaultPassword,
         role: "student",
+        roomNumber: "101",
+        accommodation: "Oak Hall",
+        phone: "+1 555-0101",
       },
       {
         name: "Emma Student",
         email: "emma@student.com",
         password: defaultPassword,
         role: "student",
+        roomNumber: "205",
+        accommodation: "Maple Hall",
+        phone: "+1 555-0102",
       },
       {
         name: "Frank Student",
         email: "frank@student.com",
         password: defaultPassword,
         role: "student",
+        roomNumber: "312",
+        accommodation: "Pine Hall",
+        phone: "+1 555-0103",
       },
     ];
 
@@ -70,6 +79,7 @@ const seedDatabase = async () => {
     // 3. Generate 10 Dummy Tickets
     const statuses = ["open", "in-progress", "resolved"];
     const priorities = ["low", "medium", "high", "urgent"];
+    const categories = ["Plumbing", "Electrical", "Furniture", "Internet", "Other"];
     const issues = [
       "Leaky faucet",
       "Broken heater",
@@ -88,13 +98,17 @@ const seedDatabase = async () => {
         statuses[Math.floor(Math.random() * statuses.length)];
       const randomPriority =
         priorities[Math.floor(Math.random() * priorities.length)];
+      const randomCategory =
+        categories[Math.floor(Math.random() * categories.length)];
       const randomIssue = issues[Math.floor(Math.random() * issues.length)];
 
       ticketsData.push({
-        title: `${randomIssue} in Room ${100 + i}`,
+        title: `${randomIssue} in Room ${randomStudent.roomNumber}`,
         description: `This is a dummy description for a ${randomIssue}. Please fix it soon.`,
         status: randomStatus,
         priority: randomPriority,
+        category: randomCategory,
+        roomNumber: randomStudent.roomNumber,
         createdBy: randomStudent._id, // Linking ticket to a student
       });
     }

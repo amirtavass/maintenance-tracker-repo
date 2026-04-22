@@ -35,6 +35,7 @@ export default function RequestDetailsModal({
   const [internalNotes, setInternalNotes] = useState(ticket?.notes || '');
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateMessage, setUpdateMessage] = useState('');
+  const [currentStatus, setCurrentStatus] = useState<'open' | 'in-progress' | 'resolved'>(ticket?.status || 'open');
 
   if (!isOpen || !ticket) return null;
 
@@ -44,13 +45,15 @@ export default function RequestDetailsModal({
 
     try {
       await onStatusChange(ticket._id, newStatus, internalNotes);
-      setUpdateMessage('Status updated successfully!');
+      setCurrentStatus(newStatus as 'open' | 'in-progress' | 'resolved');
+      setUpdateMessage('✓ Status updated successfully!');
+      
       setTimeout(() => {
         setUpdateMessage('');
-        onClose();
-      }, 1500);
+      }, 2000);
     } catch (error) {
-      setUpdateMessage('Failed to update status. Please try again.');
+      console.error('Status change error:', error);
+      setUpdateMessage('✗ Failed to update status. Please try again.');
     } finally {
       setIsUpdating(false);
     }
@@ -108,8 +111,8 @@ export default function RequestDetailsModal({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-2">Current Status</p>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(ticket.status)}`}>
-                {ticket.status.toUpperCase().replace('-', ' ')}
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(currentStatus)}`}>
+                {currentStatus.toUpperCase().replace('-', ' ')}
               </span>
             </div>
             <div>
@@ -187,7 +190,7 @@ export default function RequestDetailsModal({
           <div className="space-y-2 border-t border-gray-200 pt-6">
             <p className="text-sm font-medium text-gray-600 mb-3">Change Status</p>
             <div className="grid grid-cols-1 gap-2">
-              {ticket.status === 'open' && (
+              {currentStatus === 'open' && (
                 <button
                   onClick={() => handleStatusChange('in-progress')}
                   disabled={isUpdating}
@@ -198,7 +201,7 @@ export default function RequestDetailsModal({
                 </button>
               )}
 
-              {ticket.status === 'in-progress' && (
+              {currentStatus === 'in-progress' && (
                 <>
                   <button
                     onClick={() => handleStatusChange('open')}
@@ -219,7 +222,7 @@ export default function RequestDetailsModal({
                 </>
               )}
 
-              {ticket.status === 'resolved' && (
+              {currentStatus === 'resolved' && (
                 <button
                   onClick={() => handleStatusChange('open')}
                   disabled={isUpdating}

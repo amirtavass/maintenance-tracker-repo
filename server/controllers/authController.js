@@ -4,7 +4,7 @@ const generateToken = require("../utils/generateToken");
 // Register a new user and return public user data only
 const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, roomNumber, accommodation, phone } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -32,6 +32,9 @@ const registerUser = async (req, res, next) => {
       email: normalizedEmail,
       password,
       role: userRole,
+      roomNumber: roomNumber?.trim(),
+      accommodation: accommodation?.trim(),
+      phone: phone?.trim(),
     });
 
     await user.save();
@@ -44,6 +47,9 @@ const registerUser = async (req, res, next) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          roomNumber: user.roomNumber,
+          accommodation: user.accommodation,
+          phone: user.phone,
         },
       },
     });
@@ -84,6 +90,9 @@ const loginUser = async (req, res, next) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          roomNumber: user.roomNumber,
+          accommodation: user.accommodation,
+          phone: user.phone,
         },
       },
     });

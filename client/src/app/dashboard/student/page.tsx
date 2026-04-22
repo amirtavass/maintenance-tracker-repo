@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ActivityTimeline from "@/components/dashboard/student/ActivityTimeline";
 import ChartOverview from "@/components/dashboard/student/ChartOverview";
@@ -23,18 +24,31 @@ interface Ticket {
   createdBy: { name: string; email: string };
 }
 
-export default function StudentDashboard() {
-  const studentName = "Sophie Turner";
-  const studentInfo = {
-    name: "Sophie Turner",
-    room: "214",
-    accommodation: "Maple Hall",
-    email: "sophie.turner@uni.edu",
-    phone: "+44 7712 345678",
-  };
+interface UserProfile {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  roomNumber?: string;
+  accommodation?: string;
+  phone?: string;
+}
 
+export default function StudentDashboard() {
+  const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [requests, setRequests] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login/student");
+      return;
+    }
+  }, [router]);
 
   const transformTickets = (tickets: Ticket[]) => {
     return tickets.map((ticket) => ({
@@ -47,27 +61,52 @@ export default function StudentDashboard() {
     }));
   };
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5001/api/requests", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setRequests(data.data?.tickets || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch requests:", error);
-      } finally {
-        setLoading(false);
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5001/api/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setUserProfile(data.data.user);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
+  const fetchRequests = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5001/api/requests", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setRequests(data.data?.tickets || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch requests:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
     fetchRequests();
+
+    // Poll for updates every 5 seconds
+    const interval = setInterval(fetchRequests, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const stats = [
@@ -126,7 +165,7 @@ export default function StudentDashboard() {
       <div className="xl:flex xl:min-h-screen">
         <Sidebar />
         <div className="flex-1">
-          <Navbar studentName={studentName} />
+          <Navbar studentName={userProfile?.name || "Loading..."} />
           <main className="px-6 py-6 xl:px-10 xl:py-8">
             <div className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
               <div className="space-y-6">
@@ -134,7 +173,7 @@ export default function StudentDashboard() {
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                       <p className="text-sm uppercase tracking-[0.28em] text-slate-300">Welcome back</p>
-                      <h2 className="mt-4 text-3xl font-semibold">{studentName}</h2>
+                      <h2 className="mt-4 text-3xl font-semibold">{userProfile?.name || "Loading..."}</h2>
                       <p className="mt-3 max-w-xl text-sm leading-6 text-slate-200">
                         Manage your accommodation maintenance requests, get updates in real time, and keep your room comfortable without extra steps.
                       </p>
@@ -166,7 +205,38 @@ export default function StudentDashboard() {
               </div>
 
               <div className="space-y-6">
-                <ProfileCard {...studentInfo} />
+                {profileLoading ? (
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div className="animate-pulse">
+                      <div className="flex items-center gap-4">
+                        <div className="h-16 w-16 rounded-3xl bg-slate-200"></div>
+                        <div className="space-y-2">
+                          <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                          <div className="h-3 w-24 bg-slate-200 rounded"></div>
+                        </div>
+                      </div>
+                      <div className="mt-6 space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="h-16 bg-slate-200 rounded-2xl"></div>
+                          <div className="h-16 bg-slate-200 rounded-2xl"></div>
+                        </div>
+                        <div className="h-16 bg-slate-200 rounded-2xl"></div>
+                      </div>
+                    </div>
+                  </div>
+                ) : userProfile ? (
+                  <ProfileCard
+                    name={userProfile.name}
+                    room={userProfile.roomNumber || "Not set"}
+                    accommodation={userProfile.accommodation || "Not set"}
+                    email={userProfile.email}
+                    phone={userProfile.phone || "Not set"}
+                  />
+                ) : (
+                  <div className="rounded-3xl border border-red-200 bg-red-50 p-6 shadow-sm">
+                    <p className="text-red-600">Failed to load profile data</p>
+                  </div>
+                )}
                 <ActivityTimeline />
               </div>
             </div>

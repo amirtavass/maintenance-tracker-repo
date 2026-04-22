@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema(
       enum: ["student", "staff", "admin"],
       default: "student",
     },
+    roomNumber: { type: String, trim: true },
+    accommodation: { type: String, trim: true },
+    phone: { type: String, trim: true },
   },
   { timestamps: true },
 );
