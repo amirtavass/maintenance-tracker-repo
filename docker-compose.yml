@@ -3,20 +3,21 @@ version: "3.8"
 services:
   backend:
     build: ./server
-    container_name: cube-backend
+    container_name: maintenance-backend
     ports:
       - "5000:5000"
     env_file:
-      - ./server/.env # Tells Docker to load your backend secrets
+      - ./server/.env
     restart: always
 
   frontend:
-    build: ./client
-    container_name: cube-frontend
+    build:
+      context: ./client
+      args:
+        - NEXT_PUBLIC_API_URL=http://16.171.20.152:5000
+    container_name: maintenance-frontend
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://16.171.20.152:5000
     depends_on:
-      - backend # Ensures the backend starts before the frontend
+      - backend
     restart: always
