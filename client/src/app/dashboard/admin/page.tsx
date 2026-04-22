@@ -6,6 +6,7 @@ import SummaryCard from "@/components/dashboard/admin/SummaryCard";
 import RequestsByStatusChart from "@/components/dashboard/admin/RequestsByStatusChart";
 import RequestsByCategoryChart from "@/components/dashboard/admin/RequestsByCategoryChart";
 import RequestsTrendChart from "@/components/dashboard/admin/RequestsTrendChart";
+import AdvancedFilter, { FilterState } from "@/components/dashboard/admin/AdvancedFilter";
 import {
   Users,
   FileText,
@@ -19,6 +20,14 @@ import {
 
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>({
+    search: "",
+    status: "All",
+    priority: "All",
+    category: "All",
+    dateRange: "all",
+  });
+  const [filteredRequests, setFilteredRequests] = useState<any[]>([]);
   const [stats, setStats] = useState({
     totalStudents: 245,
     totalRequests: 1284,
@@ -92,6 +101,35 @@ export default function AdminDashboard() {
       status: "In Progress",
     },
   ]);
+
+  // Filter requests based on filters
+  useEffect(() => {
+    let filtered = [...recentRequests];
+
+    if (filters.search) {
+      const search = filters.search.toLowerCase();
+      filtered = filtered.filter(
+        (req) =>
+          req.id.toLowerCase().includes(search) ||
+          req.student.toLowerCase().includes(search) ||
+          req.issue.toLowerCase().includes(search)
+      );
+    }
+
+    if (filters.status !== "All") {
+      filtered = filtered.filter((req) => req.status === filters.status);
+    }
+
+    if (filters.priority !== "All") {
+      filtered = filtered.filter((req) => req.priority === filters.priority);
+    }
+
+    if (filters.category !== "All") {
+      filtered = filtered.filter((req) => req.category === filters.category);
+    }
+
+    setFilteredRequests(filtered);
+  }, [filters, recentRequests]);
 
   const [staffPerformance] = useState([
     {
@@ -292,24 +330,11 @@ export default function AdminDashboard() {
 
             {/* Recent Requests Table */}
             <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-gray-200 dark:border-zinc-800 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-zinc-800">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   Recent Requests
                 </h2>
-                <div className="flex gap-2">
-                  <div className="relative">
-                    <Search size={18} className="absolute left-3 top-2.5 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 text-sm"
-                    />
-                  </div>
-                  <button className="px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 flex items-center gap-2 text-sm">
-                    <Filter size={18} />
-                    Filter
-                  </button>
-                </div>
+                <AdvancedFilter onFilterChange={setFilters} />
               </div>
 
               <div className="overflow-x-auto">
@@ -346,46 +371,56 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
-                    {recentRequests.map((request) => (
-                      <tr
-                        key={request.id}
-                        className="hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
-                      >
-                        <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
-                          {request.id}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
-                          {request.student}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
-                          {request.room}, {request.block}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
-                          {request.issue}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300">
-                            {request.category}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(request.priority)}`}>
-                            {request.priority}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
-                          {request.staff}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(request.status)}`}>
-                            {request.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
-                          {request.date}
+                    {filteredRequests.length > 0 ? (
+                      filteredRequests.map((request) => (
+                        <tr
+                          key={request.id}
+                          className="hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                        >
+                          <td className="px-6 py-4 text-sm font-semibold text-gray-900 dark:text-white">
+                            {request.id}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
+                            {request.student}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
+                            {request.room}, {request.block}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
+                            {request.issue}
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <span className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300">
+                              {request.category}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(request.priority)}`}>
+                              {request.priority}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
+                            {request.staff}
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(request.status)}`}>
+                              {request.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-zinc-400">
+                            {request.date}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={9} className="px-6 py-8 text-center">
+                          <p className="text-gray-500 dark:text-zinc-400">
+                            No requests found matching your filters.
+                          </p>
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
