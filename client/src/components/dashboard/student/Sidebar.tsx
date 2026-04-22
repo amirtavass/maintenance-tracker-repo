@@ -10,7 +10,7 @@ const navItems = [
   { label: "Profile", href: "/dashboard/student#profile", active: false },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onProfileClick }: { onProfileClick?: () => void }) {
   return (
     <aside className="hidden xl:flex xl:w-72 xl:flex-col xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:py-8 xl:px-6 bg-white border-r border-slate-200">
       <div className="flex items-center gap-3 mb-8">
@@ -24,19 +24,29 @@ export default function Sidebar() {
       </div>
 
       <nav className="space-y-2">
-        {navItems.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`block rounded-2xl px-4 py-3 text-sm font-medium transition ${
-              item.active
-                ? "bg-slate-900 text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          const isProfile = item.label === "Profile";
+          const sharedClass = `block rounded-2xl px-4 py-3 text-sm font-medium transition ${
+            item.active
+              ? "bg-slate-900 text-white shadow-sm"
+              : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          }`;
+
+          return isProfile ? (
+            <button
+              key={item.label}
+              type="button"
+              onClick={onProfileClick}
+              className={sharedClass}
+            >
+              {item.label}
+            </button>
+          ) : (
+            <Link key={item.label} href={item.href} className={sharedClass}>
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="mt-auto pt-8">

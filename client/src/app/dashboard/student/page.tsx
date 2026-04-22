@@ -8,6 +8,7 @@ import ChartOverview from "@/components/dashboard/student/ChartOverview";
 import Navbar from "@/components/dashboard/student/Navbar";
 import NotificationsPanel from "@/components/dashboard/student/NotificationsPanel";
 import ProfileCard from "@/components/dashboard/student/ProfileCard";
+import ProfileEditModal from "@/components/dashboard/student/ProfileEditModal";
 import RequestTable from "@/components/dashboard/student/RequestTable";
 import Sidebar from "@/components/dashboard/student/Sidebar";
 import SummaryCard from "@/components/dashboard/student/SummaryCard";
@@ -30,6 +31,7 @@ interface UserProfile {
   email: string;
   role: string;
   roomNumber?: string;
+  blockNumber?: string;
   accommodation?: string;
   phone?: string;
 }
@@ -40,6 +42,7 @@ export default function StudentDashboard() {
   const [requests, setRequests] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -96,6 +99,38 @@ export default function StudentDashboard() {
       console.error("Failed to fetch requests:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateProfile = async (profileData: {
+    phone: string;
+    roomNumber: string;
+    blockNumber: string;
+    accommodation: string;
+  }) => {
+    try {
+      setProfileLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5001/api/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setUserProfile(data.data.user);
+        setIsEditingProfile(false);
+      } else {
+        throw new Error(data.message || "Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -163,10 +198,21 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="xl:flex xl:min-h-screen">
-        <Sidebar />
+        <Sidebar onProfileClick={() => setIsEditingProfile(true)} />
         <div className="flex-1">
           <Navbar studentName={userProfile?.name || "Loading..."} />
           <main className="px-6 py-6 xl:px-10 xl:py-8">
+            <ProfileEditModal
+              open={isEditingProfile}
+              initialValues={{
+                phone: userProfile?.phone || "",
+                roomNumber: userProfile?.roomNumber || "",
+                blockNumber: userProfile?.blockNumber || "",
+                accommodation: userProfile?.accommodation || "",
+              }}
+              onClose={() => setIsEditingProfile(false)}
+              onSave={updateProfile}
+            />
             <div className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
               <div className="space-y-6">
                 <div className="rounded-[2rem] bg-gradient-to-r from-slate-900 to-slate-700 p-8 text-white shadow-xl overflow-hidden">
@@ -228,6 +274,7 @@ export default function StudentDashboard() {
                   <ProfileCard
                     name={userProfile.name}
                     room={userProfile.roomNumber || "Not set"}
+                    blockNumber={userProfile.blockNumber || "Not set"}
                     accommodation={userProfile.accommodation || "Not set"}
                     email={userProfile.email}
                     phone={userProfile.phone || "Not set"}

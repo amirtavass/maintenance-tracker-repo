@@ -3,12 +3,14 @@
 export default function ProfileCard({
   name,
   room,
+  blockNumber,
   accommodation,
   email,
   phone,
 }: {
   name: string;
   room: string;
+  blockNumber: string;
   accommodation: string;
   email: string;
   phone: string;
@@ -22,7 +24,9 @@ export default function ProfileCard({
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Student profile</p>
           <h2 className="text-xl font-semibold text-slate-900">{name}</h2>
-          <p className="text-sm text-slate-500">{accommodation} • Room {room}</p>
+          <p className="text-sm text-slate-500">
+            {accommodation} • Block {blockNumber} • Room {room}
+          </p>
         </div>
       </div>
 

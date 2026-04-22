@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
       default: "student",
     },
     roomNumber: { type: String, trim: true },
+    blockNumber: { type: String, trim: true },
     accommodation: { type: String, trim: true },
     phone: { type: String, trim: true },
   },
