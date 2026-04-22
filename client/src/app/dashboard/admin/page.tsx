@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import AdminSidebar from "@/components/dashboard/admin/AdminSidebar";
 import SummaryCard from "@/components/dashboard/admin/SummaryCard";
+import RequestsByStatusChart from "@/components/dashboard/admin/RequestsByStatusChart";
+import RequestsByCategoryChart from "@/components/dashboard/admin/RequestsByCategoryChart";
+import RequestsTrendChart from "@/components/dashboard/admin/RequestsTrendChart";
 import {
   Users,
   FileText,
@@ -270,6 +273,21 @@ export default function AdminDashboard() {
                 trend={2}
                 description="Success rate"
               />
+            </section>
+
+            {/* Analytics Charts Section */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <RequestsByStatusChart
+                pending={stats.pendingRequests}
+                inProgress={stats.inProgressRequests}
+                resolved={stats.resolvedRequests}
+              />
+              <RequestsByCategoryChart />
+            </section>
+
+            {/* Request Trend Chart */}
+            <section>
+              <RequestsTrendChart />
             </section>
 
             {/* Recent Requests Table */}
