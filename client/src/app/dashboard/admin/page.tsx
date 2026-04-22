@@ -249,9 +249,18 @@ export default function AdminDashboard() {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-auto">
-          <div className="px-6 py-8 space-y-8">
+          <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+            {/* Welcome Section */}
+            <section className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-900 dark:to-blue-950 rounded-xl p-6 sm:p-8 text-white shadow-lg">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+                Welcome back, Admin!
+              </h1>
+              <p className="text-blue-100 text-lg">
+                Here's your system overview for today
+              </p>
+            </section>
             {/* Summary Cards */}
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <SummaryCard
                 title="Total Students"
                 value={stats.totalStudents}
@@ -287,7 +296,7 @@ export default function AdminDashboard() {
             </section>
 
             {/* Key Metrics Row */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               <SummaryCard
                 title="In Progress"
                 value={stats.inProgressRequests}
@@ -314,7 +323,7 @@ export default function AdminDashboard() {
             </section>
 
             {/* Analytics Charts Section */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <RequestsByStatusChart
                 pending={stats.pendingRequests}
                 inProgress={stats.inProgressRequests}
@@ -427,7 +436,7 @@ export default function AdminDashboard() {
             </section>
 
             {/* Staff Performance & Urgent Issues */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 pb-8">
               {/* Staff Performance */}
               <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-gray-200 dark:border-zinc-800 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200 dark:border-zinc-800">

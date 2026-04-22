@@ -28,7 +28,7 @@ export default function SummaryCard({
   color = "blue",
 }: SummaryCardProps) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg transition-shadow">
+    <div className="summary-card bg-white dark:bg-zinc-900 rounded-xl shadow-md border border-gray-200 dark:border-zinc-800 p-6">
       {/* Header with Icon */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-gray-600 dark:text-zinc-400">
