@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center flex-1 w-full min-h-screen bg-white dark:bg-zinc-950">
+    <main className="flex flex-col items-center justify-center flex-1 w-full min-h-screen bg-gray-300 dark:bg-zinc-950">
       <div className="text-center px-4">
         <h1 className="text-5xl sm:text-6xl font-bold tracking-tight text-[#1e3b8a] dark:text-blue-400 mb-4">
           Maintenance Tracker
