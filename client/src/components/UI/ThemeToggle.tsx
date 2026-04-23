@@ -13,6 +13,9 @@ export default function ThemeToggle() {
     return () => clearTimeout(timer);
   }, []);
 
+  if (!mounted) {
+    return <div className="w-9 h-9" aria-hidden="true" />;
+  }
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

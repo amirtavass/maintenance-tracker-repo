@@ -95,7 +95,7 @@ function StaffLoginForm() {
               autoComplete="email"
               required
               className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 placeholder-gray-400 dark:placeholder-zinc-500 text-gray-900 dark:text-white dark:bg-zinc-800 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm transition-colors"
-              placeholder="alex@staff.com"
+              placeholder="bob@thecube.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
